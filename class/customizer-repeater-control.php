@@ -3,17 +3,17 @@ if ( ! class_exists( 'WP_Customize_Control' ) ) {
 	return null;
 }
 
-class Customizer_Repeater_Control extends WP_Customize_Control {
+class Customizer_Repeater extends WP_Customize_Control {
 
 	private $options = array();
 	private $config = array();
-	
+
 	/*Class constructor*/
 	public function __construct( $manager, $id, $args = array() ) {
 		parent::__construct( $manager, $id, $args );
 		/*Get options from customizer.php*/
 		$this->options = $args;
-		$this->config = parse_ini_file('config.ini', true);
+		$this->config  = parse_ini_file( get_template_directory().'/customizer-repeater/config.ini', true );
 	}
 
 	public function render_content() {
@@ -21,16 +21,17 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 		/*Counter that helps checking if the box is first and should have the delete button disabled*/
 		$it = 0;
 
-		/*Get values (json format) or default values*/
-		if ( ! empty( $this->value() ) ) {
-			$values = $this->value();
-		} elseif ( ! empty( $this->setting->default ) ) {
-			$values = $this->setting->default;
-		}
+		/*Get default options*/
+		$this_default = json_decode( $this->setting->default );
+
+		/*Get values (json format)*/
+		$values = $this->value();
 
 		/*Decode values*/
-		if ( ! empty( $values ) ) {
-			$json = json_decode( $values, true );
+		$json = json_decode( $values );
+
+		if ( ! is_array( $json ) ) {
+			$json = array( $values );
 		}
 
 		/*This stores what kind of controls should the repeater have in it*/
@@ -79,12 +80,12 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 			$customizer_repeater_shortcode_control = false;
 		}
 
-		if ( ! empty( $options['customizer_repeater_socials_repeater_control'] ) ) {
-			$customizer_repeater_socials_repeater_control = $options['customizer_repeater_socials_repeater_control'];
+		if ( ! empty( $options['customizer_repeater_repeater_control'] ) ) {
+			$customizer_repeater_repeater_control = $options['customizer_repeater_repeater_control'];
 		} else {
-			$customizer_repeater_socials_repeater_control = false;
-		} ?>
-
+			$customizer_repeater_repeater_control = false;
+		}
+		?>
 		<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
 		<div class="customizer-repeater-general-control-repeater customizer-repeater-general-control-droppable">
 		<?php
@@ -99,25 +100,29 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 					if ( $customizer_repeater_image_control == true && $customizer_repeater_icon_control == true ) { ?>
 						<span
 							class="customize-control-title"><?php esc_html_e( 'Image type', $this->config['textdomain'] ); ?></span>
-						<select title="Icon type choice" class="customizer-repeater-image-choice">
-							<option value="customizer-repeater-icon"
+						<select class="customizer-repeater-image-choice">
+							<option value="customizer_repeater_icon"
 							        selected><?php esc_html_e( 'Icon', $this->config['textdomain'] ); ?></option>
-							<option value="customizer-repeater-image"><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></option>
-							<option value="customizer-repeater-none"><?php esc_html_e( 'None', $this->config['textdomain'] ); ?></option>
+							<option
+								value="customizer_repeater_image"><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></option>
+							<option
+								value="customizer_repeater_none"><?php esc_html_e( 'None', $this->config['textdomain'] ); ?></option>
 						</select>
 						<p class="customizer-repeater-image-control" style="display:none">
-							<span class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ) ?></span>
-							<input title="Image control" type="text" class="widefat custom-media-url">
-							<input type="button" class="button button-primary custom-media-button-customizer-repeater"
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ) ?></span>
+							<input type="text" class="widefat custom-media-url">
+							<input type="button" class="button button-primary customizer-repeater-custom-media-button"
 							       value="<?php esc_html_e( 'Upload Image', $this->config['textdomain'] ); ?>"/>
 						</p>
-						<div class="customizer-repeater-general-control-icon">
-							<span class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
+						<div class="social-repeater-general-control-icon">
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
 							<div class="islemag-dd">
-								<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
+								<select name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
 									<?php
-									foreach ( $icons_array as $icon ) {
-										echo '<option value="' . esc_attr( $icon ) . '" data-iconclass="' . esc_attr( $icon ) . '" >' . esc_attr( $icon ) . '</option>';
+									foreach ( $icons_array as $key => $value ) {
+										echo '<option value="' . esc_attr( $value ) . '" data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
 									} ?>
 								</select>
 							</div>
@@ -125,22 +130,24 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 						<?php
 					} else {
 						if ( $customizer_repeater_image_control == true ) { ?>
-							<span class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ) ?></span>
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ) ?></span>
 							<p class="customizer-repeater-image-control">
-								<input title="Image control" type="text" class="widefat custom-media-url">
-								<input type="button" class="button button-primary custom-media-button-customizer-repeater"
+								<input type="text" class="widefat custom-media-url">
+								<input type="button" class="button button-primary customizer-repeater-custom-media-button"
 								       value="<?php esc_html_e( 'Upload Image', $this->config['textdomain'] ); ?>"/>
 							</p>
 							<?php
 						}
 
 						if ( $customizer_repeater_icon_control == true ) { ?>
-							<span class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
 							<div class="customizer-repeater-dd">
-								<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
+								<select name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
 									<?php
-									foreach ( $icons_array as $icon ) {
-										echo '<option value="' . esc_attr( $icon ) . '" data-iconclass="' . esc_attr( $icon ) . '" >' . esc_attr( $icon ) . '</option>';
+									foreach ( $icons_array as $key => $value ) {
+										echo '<option value="' . esc_attr( $value ) . '" ' . selected( $icon->icon_value, $value ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
 									}
 									?>
 								</select>
@@ -151,14 +158,16 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 
 
 					if ( $customizer_repeater_title_control == true ) { ?>
-						<span class="customize-control-title"><?php esc_html_e( 'Title', $this->config['textdomain'] ) ?></span>
+						<span
+							class="customize-control-title"><?php esc_html_e( 'Title', $this->config['textdomain'] ) ?></span>
 						<input type="text" class="customizer-repeater-title-control"
 						       placeholder="<?php esc_html_e( 'Title', $this->config['textdomain'] ); ?>"/>
 						<?php
 					}
 
 					if ( $customizer_repeater_subtitle_control == true ) { ?>
-						<span class="customize-control-title"><?php esc_html_e( 'Subtitle', $this->config['textdomain'] ) ?></span>
+						<span
+							class="customize-control-title"><?php esc_html_e( 'Subtitle', $this->config['textdomain'] ) ?></span>
 						<input type="text" class="customizer-repeater-subtitle-control"
 						       placeholder="<?php esc_html_e( 'Subtitle', $this->config['textdomain'] ); ?>"/>
 						<?php
@@ -166,35 +175,36 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 
 					if ( $customizer_repeater_text_control == true ) {
 						?>
-						<span class="customize-control-title"><?php esc_html_e( 'Text', $this->config['textdomain'] ) ?></span>
 						<span
-							class="description customize-control-description"><?php esc_html_e( 'Allowed html: br, em, strong, a, button, ul, li', $this->config['textdomain'] ); ?></span>
+							class="customize-control-title"><?php esc_html_e( 'Text', $this->config['textdomain'] ) ?></span>
 						<textarea class="customizer-repeater-text-control"
 						          placeholder="<?php esc_html_e( 'Text', $this->config['textdomain'] ); ?>"></textarea>
 						<?php
 					}
 
 					if ( $customizer_repeater_link_control == true ) { ?>
-						<span class="customize-control-title"><?php esc_html_e( 'Link', $this->config['textdomain'] ) ?></span>
+						<span
+							class="customize-control-title"><?php esc_html_e( 'Link', $this->config['textdomain'] ) ?></span>
 						<input type="text" class="customizer-repeater-link-control"
 						       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>"/>
 						<?php
 					}
 
 					if ( $customizer_repeater_shortcode_control == true ) { ?>
-						<span class="customize-control-title"><?php esc_html_e( 'Shortcode', $this->config['textdomain'] ) ?></span>
+						<span
+							class="customize-control-title"><?php esc_html_e( 'Shortcode', $this->config['textdomain'] ) ?></span>
 						<input type="text" class="customizer-repeater-shortcode-control"
 						       placeholder="<?php esc_html_e( 'Shortcode', $this->config['textdomain'] ); ?>"/>
 						<?php
 					}
 
-					if ( $customizer_repeater_socials_repeater_control == true ) { ?>
+					if ( $customizer_repeater_repeater_control == true ) { ?>
 						<span
 							class="customize-control-title"><?php esc_html_e( 'Social icons', $this->config['textdomain'] ) ?></span>
 						<div class="customizer-repeater-social-repeater">
 							<div class="customizer-repeater-social-repeater-container">
 								<div class="customizer-repeater-dd">
-									<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>"
+									<select name="<?php echo esc_attr( $this->id ); ?>"
 									        class="customizer-repeater-icon-control">
 										<?php
 										foreach ( $icons_array as $value ) {
@@ -206,60 +216,63 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 								<input type="text" class="customizer-repeater-social-repeater-link"
 								       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>">
 								<input type="hidden" class="customizer-repeater-social-repeater-id" value="">
-								<button class="customizer-repeater-remove-social-item"
+								<button class="social-repeater-remove-social-item"
 								        style="display:none"><?php esc_html_e( 'X', $this->config['textdomain'] ); ?></button>
 							</div>
-							<input type="hidden" id="customizer-repeater-socials-repeater-colector" <?php $this->link(); ?>
-							       class="customizer-repeater-socials-repeater-colector" value=""/>
+							<input type="hidden" id="social-repeater-socials-repeater-colector" <?php $this->link(); ?>
+							       class="social-repeater-socials-repeater-colector" value=""/>
 						</div>
 						<button
-							class="customizer-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
+							class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
 						<?php
 					} ?>
 
-					<input type="hidden" class="customizer-repeater-box-id">
-					<button type="button" class="customizer-repeater-general-control-remove-field button"
+					<input type="hidden" class="social-repeater-box-id">
+					<button type="button" class="social-repeater-general-control-remove-field button"
 					        style="display:none;"><?php esc_html_e( 'Delete field', $this->config['textdomain'] ); ?></button>
 				</div> <!-- end .customizer-repeater-box-content-hidden -->
-			</div> <!-- end .customizer-repeater_general_control_repeater_container -->
+			</div> <!-- end .customizer-repeater-general-control-repeater-container -->
 			<?php
 		} else {
+
 			foreach ( $json as $icon ) { ?>
 				<div class="customizer-repeater-general-control-repeater-container customizer-repeater-draggable">
-					<div class="customizer-repeater-customize-control-title"><?php esc_html_e( $this->config['boxtitle'], $this->config['textdomain'] ) ?></div>
+					<div
+						class="customizer-repeater-customize-control-title"><?php esc_html_e( $this->config['boxtitle'], $this->config['textdomain'] ) ?></div>
 					<div class="customizer-repeater-box-content-hidden">
 						<?php
 						if ( $customizer_repeater_image_control == true && $customizer_repeater_icon_control == true ) { ?>
 							<span
 								class="customize-control-title"><?php esc_html_e( 'Image type', $this->config['textdomain'] ); ?></span>
-							<select title="Icon type choice" class="customizer-repeater-image-choice">
+							<select class="customizer-repeater-image-choice">
 								<option
-									value="customizer-repeater-icon" <?php selected( $icon->choice, 'customizer-repeater-icon' ); ?>><?php esc_html_e( 'Icon', $this->config['textdomain'] ); ?></option>
+									value="customizer_repeater_icon" <?php selected( $icon->choice, 'customizer_repeater_icon' ); ?>><?php esc_html_e( 'Icon', $this->config['textdomain'] ); ?></option>
 								<option
-									value="customizer-repeater-image" <?php selected( $icon->choice, 'customizer-repeater-image' ); ?>><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></option>
+									value="customizer_repeater_image" <?php selected( $icon->choice, 'customizer_repeater_image' ); ?>><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></option>
 								<option
-									value="customizer-repeater-none" <?php selected( $icon->choice, 'customizer-repeater-none' ); ?>><?php esc_html_e( 'None', $this->config['textdomain'] ); ?></option>
+									value="customizer_repeater_none" <?php selected( $icon->choice, 'customizer_repeater_none' ); ?>><?php esc_html_e( 'None', $this->config['textdomain'] ); ?></option>
 							</select>
-							<p class="customizer-repeater-image-control" <?php if ( ! empty( $icon->choice ) && $icon->choice != 'customizer-repeater-image' ) {
+							<p class="customizer-repeater-image-control" <?php if ( ! empty( $icon->choice ) && $icon->choice != 'customizer_repeater_image' ) {
 								echo 'style="display:none"';
 							} ?>>
-								<span
-									class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></span>
-								<input title="Image control" type="text" class="widefat custom-media-url"
-								       value="<?php if ( ! empty( $icon->image_url ) ) {
+									<span
+										class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ); ?></span>
+
+								<input type="text" class="widefat custom-media-url"
+								       value="<?php if ( !empty( $icon->image_url ) ) {
 									       echo esc_attr( $icon->image_url );
 								       } ?>">
-								<input type="button" class="button button-primary custom-media-button-customizer-repeater"
+								<input type="button" class="button button-primary customizer-repeater-custom-media-button"
 								       value="<?php esc_html_e( 'Upload Image', $this->config['textdomain'] ); ?>"/>
 							</p>
 							<div
-								class="customizer-repeater-general-control-icon" <?php if ( ! empty( $icon->choice ) && $icon->choice != 'customizer-repeater-icon' ) {
+								class="social-repeater-general-control-icon" <?php if ( ! empty( $icon->choice ) && $icon->choice != 'customizer_repeater_icon' ) {
 								echo 'style="display:none"';
 							} ?>>
-								<span
-									class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
+									<span
+										class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
 								<div class="customizer-repeater-dd">
-									<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>"
+									<select name="<?php echo esc_attr( $this->id ); ?>"
 									        class="customizer-repeater-icon-control">
 										<?php
 										foreach ( $icons_array as $key => $value ) {
@@ -275,11 +288,12 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 								<span
 									class="customize-control-title"><?php esc_html_e( 'Image', $this->config['textdomain'] ) ?></span>
 								<p class="customizer-repeater-image-control">
-									<input title="Image control" type="text" class="widefat custom-media-url"
+									<input type="text" class="widefat custom-media-url"
 									       value="<?php if ( ! empty( $icon->image_url ) ) {
 										       echo esc_attr( $icon->image_url );
 									       } ?>">
-									<input type="button" class="button button-primary custom-media-button-customizer-repeater"
+									<input type="button"
+									       class="button button-primary customizer-repeater-custom-media-button"
 									       value="<?php esc_html_e( 'Upload Image', $this->config['textdomain'] ); ?>"/>
 								</p>
 								<?php
@@ -289,7 +303,7 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 								<span
 									class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
 								<div class="customizer-repeater-dd">
-									<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>"
+									<select name="<?php echo esc_attr( $this->id ); ?>"
 									        class="customizer-repeater-icon-control">
 										<?php
 										foreach ( $icons_array as $key => $value ) {
@@ -302,8 +316,10 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 						}
 
 						if ( $customizer_repeater_title_control == true ) { ?>
-							<span class="customize-control-title"><?php esc_html_e( 'Title', $this->config['textdomain'] ) ?></span>
-							<input type="text" value="<?php if ( ! empty( $icon->title ) ) {
+
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Title', $this->config['textdomain'] ) ?></span>
+							<input type="text" value="<?php if ( !empty( $icon->title ) ) {
 								echo esc_attr( $icon->title );
 							} ?>" class="customizer-repeater-title-control"
 							       placeholder="<?php esc_html_e( 'Title', $this->config['textdomain'] ); ?>"/>
@@ -322,9 +338,8 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 
 						if ( $customizer_repeater_text_control == true ) {
 							?>
-							<span class="customize-control-title"><?php esc_html_e( 'Text', $this->config['textdomain'] ) ?></span>
 							<span
-								class="description customize-control-description"><?php esc_html_e( 'Allowed html: br, em, strong, a, button, ul, li', $this->config['textdomain'] ); ?></span>
+								class="customize-control-title"><?php esc_html_e( 'Text', $this->config['textdomain'] ) ?></span>
 							<textarea class="customizer-repeater-text-control"
 							          placeholder="<?php esc_html_e( 'Text', $this->config['textdomain'] ); ?>"><?php if ( ! empty( $icon->text ) ) {
 									echo esc_attr( $icon->text );
@@ -333,7 +348,8 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 						}
 
 						if ( $customizer_repeater_link_control ) { ?>
-							<span class="customize-control-title"><?php esc_html_e( 'Link', $this->config['textdomain'] ) ?></span>
+							<span
+								class="customize-control-title"><?php esc_html_e( 'Link', $this->config['textdomain'] ) ?></span>
 							<input type="text" value="<?php if ( ! empty( $icon->link ) ) {
 								echo esc_url( $icon->link );
 							} ?>" class="customizer-repeater-link-control"
@@ -351,53 +367,79 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 							<?php
 						}
 
-						if ( $customizer_repeater_socials_repeater_control == true ){ ?>
+						if ( $customizer_repeater_repeater_control == true ){ ?>
 						<span
 							class="customize-control-title"><?php esc_html_e( 'Social icons', $this->config['textdomain'] ); ?></span>
 						<div class="customizer-repeater-social-repeater">
 							<?php
 							if ( isset( $icon->social_repeater ) && ! empty( $icon->social_repeater ) ){
-							$show_del = 0;
-							$social_repeater = json_decode( html_entity_decode( $icon->social_repeater ), true );
-
-							foreach ( $social_repeater as $social_icon ) {
-								$show_del ++; ?>
-								<div class="customizer-repeater-social-repeater-container">
-									<div class="customizer-repeater-dd">
-										<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>"
-										        class="customizer-repeater-icon-control">
-											<?php
-											foreach ( $icons_array as $value ) {
-												echo '<option value="' . esc_attr( $value ) . '" ' . selected( $social_icon['icon'], $value ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
-											} ?>
-										</select>
+								$show_del        = 0;
+								$social_repeater = json_decode( html_entity_decode( $icon->social_repeater ), true );
+								if(!empty($social_repeater)) {
+									foreach ( $social_repeater as $social_icon ) {
+										$show_del ++; ?>
+										<div class="customizer-repeater-social-repeater-container">
+											<div class="customizer-repeater-dd">
+												<select name="<?php echo esc_attr( $this->id ); ?>"
+												        class="customizer-repeater-icon-control">
+													<?php
+													foreach ( $icons_array as $value ) {
+														echo '<option value="' . esc_attr( $value ) . '" ' . selected( $social_icon['icon'], $value ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
+													} ?>
+												</select>
+											</div>
+											<input type="text" class="customizer-repeater-social-repeater-link"
+											       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>"
+											       value="<?php if ( ! empty( $social_icon['link'] ) ) {
+												       echo esc_url( $social_icon['link'] );
+											       } ?>">
+											<input type="hidden" class="customizer-repeater-social-repeater-id"
+											       value="<?php if ( ! empty( $social_icon['id'] ) ) {
+												       echo esc_attr( $social_icon['id'] );
+											       } ?>">
+											<button class="social-repeater-remove-social-item"
+											        style="<?php if ( $show_del == 1 ) {
+												        echo "display:none";
+											        } ?>"><?php esc_html_e( 'X', $this->config['textdomain'] ); ?></button>
+										</div>
+										<?php
+									}
+								} else { ?>
+									<div class="customizer-repeater-social-repeater">
+										<div class="customizer-repeater-social-repeater-container">
+											<div class="customizer-repeater-dd">
+												<select name="<?php echo esc_attr( $this->id ); ?>"
+												        class="customizer-repeater-icon-control">
+													<?php
+													foreach ( $icons_array as $value ) {
+														echo '<option value="' . esc_attr( $value ) . '" ' . selected( $value, 'No Icon' ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
+													}
+													?>
+												</select>
+											</div>
+											<input type="text" class="customizer-repeater-social-repeater-link"
+											       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>">
+											<input type="hidden" class="customizer-repeater-social-repeater-id" value="">
+											<button class="social-repeater-remove-social-item"
+											        style="display:none"><?php esc_html_e( 'X', $this->config['textdomain'] ); ?></button>
+										</div>
+										<input type="hidden" id="social-repeater-socials-repeater-colector" <?php $this->link(); ?>
+										       class="social-repeater-socials-repeater-colector" value=""/>
 									</div>
-									<input type="text" class="customizer-repeater-social-repeater-link"
-									       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>"
-									       value="<?php if ( ! empty( $social_icon['link'] ) ) {
-										       echo esc_url( $social_icon['link'] );
-									       } ?>">
-									<input type="hidden" class="customizer-repeater-social-repeater-id"
-									       value="<?php if ( ! empty( $social_icon['id'] ) ) {
-										       echo esc_attr( $social_icon['id'] );
-									       } ?>">
-									<button class="customizer-repeater-remove-social-item" style="<?php if ( $show_del == 1 ) {
-										echo "display:none";
-									} ?>"><?php esc_html_e( 'X', $this->config['textdomain'] ); ?></button>
-								</div>
-								<?php
-							} ?>
-							<input type="hidden" id="customizer-repeater-socials-repeater-colector"
-							       class="customizer-repeater-socials-repeater-colector"
+									<?php
+								}?>
+								<input type="hidden" id="social-repeater-socials-repeater-colector"
+							       class="social-repeater-socials-repeater-colector"
 							       value="<?php echo esc_textarea( html_entity_decode( $icon->social_repeater ) ); ?>"/>
 						</div>
 						<button
-							class="customizer-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
+							class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
 						<?php
 						} else { ?>
 						<div class="customizer-repeater-social-repeater-container">
 							<div class="customizer-repeater-dd">
-								<select title="Icon control" name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
+								<select name="<?php echo esc_attr( $this->id ); ?>"
+								        class="customizer-repeater-icon-control">
 									<?php
 									foreach ( $icons_array as $value ) {
 										echo '<option value="' . esc_attr( $value ) . '" ' . selected( $value, "No Icon" ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
@@ -407,48 +449,40 @@ class Customizer_Repeater_Control extends WP_Customize_Control {
 							<input type="text" class="customizer-repeater-social-repeater-link"
 							       placeholder="<?php esc_html_e( 'Link', $this->config['textdomain'] ); ?>" value="">
 							<input type="hidden" class="customizer-repeater-social-repeater-id" value="">
-							<button class="customizer-repeater-remove-social-item"
+							<button class="social-repeater-remove-social-item"
 							        style="display:none"><?php esc_html_e( 'X', $this->config['textdomain'] ); ?></button>
 						</div>
-						<input type="hidden" id="customizer-repeater-socials-repeater-colector"
-						       class="customizer-repeater-socials-repeater-colector" value=""/>
+						<input type="hidden" id="social-repeater-socials-repeater-colector"
+						       class="social-repeater-socials-repeater-colector" value=""/>
 					</div>
 					<button
-						class="customizer-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
+						class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->config['textdomain'] ); ?></button>
 					<?php
 					}
 					} ?>
 
-					<input type="hidden" class="customizer-repeater-box-id" value="<?php if ( ! empty( $icon->id ) ) {
+					<input type="hidden" class="social-repeater-box-id" value="<?php if ( ! empty( $icon->id ) ) {
 						echo esc_attr( $icon->id );
 					} ?>">
 					<button type="button"
-					        class="customizer-repeater-general-control-remove-field button" <?php if ( $it == 0 ) {
+					        class="social-repeater-general-control-remove-field button" <?php if ( $it == 0 ) {
 						echo 'style="display:none;"';
 					} ?>><?php esc_html_e( 'Delete field', $this->config['textdomain'] ); ?></button>
 				</div><!-- end .customizer-repeater-box-content-hidden -->
-				</div><!-- end .customizer-repeater_general_control_repeater_container -->
+				</div><!-- end .customizer-repeater-general-control-repeater-container -->
 				<?php
 				$it ++;
 			}
 		}
 
+		?>
+		<input type="hidden"
+		       id="customizer-repeater-<?php echo $options['section']; ?>-colector" <?php $this->link(); ?>
+		       class="customizer-repeater-colector" value="<?php echo esc_textarea( $this->value() ); ?>"/>
 
-		if ( ! empty( $this_default ) && empty( $json ) ) { ?>
-			<input type="hidden"
-			       id="customizer-repeater-<?php echo $options['section']; ?>-repeater-colector" <?php $this->link(); ?>
-			       class="customizer-repeater-repeater-colector"
-			       value="<?php echo esc_textarea( json_encode( $this_default ) ); ?>"/>
-			<?php
-		} else { ?>
-			<input type="hidden"
-			       id="customizer-repeater-<?php echo $options['section']; ?>-repeater-colector" <?php $this->link(); ?>
-			       class="customizer-repeater-repeater-colector" value="<?php echo esc_textarea( $this->value() ); ?>"/>
-			<?php
-		} ?>
-
+		</div>
 		<button type="button"
-		        class="button add-field customizer-repeater-general-control-new-field"><?php esc_html_e( 'Add new field', $this->config['textdomain'] ); ?></button>
+		        class="button add_field customizer-repeater-new-field"><?php esc_html_e( 'Add new field', $this->config['textdomain'] ); ?></button>
 		<?php
 	}
 }
