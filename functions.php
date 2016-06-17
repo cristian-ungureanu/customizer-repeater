@@ -15,16 +15,3 @@ function customizer_repeater_registers() {
 
 }
 add_action( 'customize_controls_enqueue_scripts', 'customizer_repeater_registers' );
-
-function customizer_repeater_sanitize($input){
-	$input_decoded = json_decode($input,true);
-	if(!empty($input_decoded)) {
-		foreach ($input_decoded as $boxk => $box ){
-			foreach ($box as $key => $value){
-				$input_decoded[$boxk][$key] = wp_kses_post( force_balance_tags( $value ) );
-			}
-		}
-		return json_encode($input_decoded);
-	}
-	return $input;
-}
