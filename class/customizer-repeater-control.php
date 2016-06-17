@@ -118,7 +118,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 						<div class="social-repeater-general-control-icon">
 							<span
 								class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
-							<div class="islemag-dd">
+							<div class="customizer-repeater-ic">
 								<select name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
 									<?php
 									foreach ( $icons_array as $key => $value ) {
@@ -143,7 +143,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 						if ( $customizer_repeater_icon_control == true ) { ?>
 							<span
 								class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
-							<div class="customizer-repeater-dd">
+							<div class="customizer-repeater-im">
 								<select name="<?php echo esc_attr( $this->id ); ?>" class="customizer-repeater-icon-control">
 									<?php
 									foreach ( $icons_array as $key => $value ) {
@@ -203,9 +203,9 @@ class Customizer_Repeater extends WP_Customize_Control {
 							class="customize-control-title"><?php esc_html_e( 'Social icons', $this->config['textdomain'] ) ?></span>
 						<div class="customizer-repeater-social-repeater">
 							<div class="customizer-repeater-social-repeater-container">
-								<div class="customizer-repeater-dd">
+								<div class="customizer-repeater-rc">
 									<select name="<?php echo esc_attr( $this->id ); ?>"
-									        class="customizer-repeater-icon-control">
+									        class="customizer-repeater-repeater-icon-control">
 										<?php
 										foreach ( $icons_array as $value ) {
 											echo '<option value="' . esc_attr( $value ) . '" ' . selected( $value, 'No Icon' ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
@@ -271,7 +271,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 							} ?>>
 									<span
 										class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
-								<div class="customizer-repeater-dd">
+								<div class="customizer-repeater-ic">
 									<select name="<?php echo esc_attr( $this->id ); ?>"
 									        class="customizer-repeater-icon-control">
 										<?php
@@ -302,7 +302,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 							if ( $customizer_repeater_icon_control == true ) { ?>
 								<span
 									class="customize-control-title"><?php esc_html_e( 'Icon', $this->config['textdomain'] ) ?></span>
-								<div class="customizer-repeater-dd">
+								<div class="customizer-repeater-ic">
 									<select name="<?php echo esc_attr( $this->id ); ?>"
 									        class="customizer-repeater-icon-control">
 										<?php
@@ -379,9 +379,9 @@ class Customizer_Repeater extends WP_Customize_Control {
 									foreach ( $social_repeater as $social_icon ) {
 										$show_del ++; ?>
 										<div class="customizer-repeater-social-repeater-container">
-											<div class="customizer-repeater-dd">
+											<div class="customizer-repeater-rc">
 												<select name="<?php echo esc_attr( $this->id ); ?>"
-												        class="customizer-repeater-icon-control">
+												        class="customizer-repeater-repeater-icon-control">
 													<?php
 													foreach ( $icons_array as $value ) {
 														echo '<option value="' . esc_attr( $value ) . '" ' . selected( $social_icon['icon'], $value ) . ' data-iconclass="' . esc_attr( $value ) . '" >' . esc_attr( $value ) . '</option>';
@@ -407,7 +407,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 								} else { ?>
 									<div class="customizer-repeater-social-repeater">
 										<div class="customizer-repeater-social-repeater-container">
-											<div class="customizer-repeater-dd">
+											<div class="customizer-repeater-rc">
 												<select name="<?php echo esc_attr( $this->id ); ?>"
 												        class="customizer-repeater-icon-control">
 													<?php
@@ -437,7 +437,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 						<?php
 						} else { ?>
 						<div class="customizer-repeater-social-repeater-container">
-							<div class="customizer-repeater-dd">
+							<div class="customizer-repeater-rc">
 								<select name="<?php echo esc_attr( $this->id ); ?>"
 								        class="customizer-repeater-icon-control">
 									<?php
