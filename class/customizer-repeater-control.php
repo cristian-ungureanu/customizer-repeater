@@ -16,6 +16,15 @@ class Customizer_Repeater extends WP_Customize_Control {
 		$this->config  = parse_ini_file( get_template_directory().'/customizer-repeater/config.ini', true );
 	}
 
+	/*Enqueue resources for the control*/
+	public function enqueue() {
+		wp_enqueue_style( 'customizer_repeater_font_awesome', get_template_directory_uri().'/customizer-repeater/css/font-awesome.min.css','1.0.0' );
+		wp_enqueue_style( 'customizer_repeater_selectric', get_template_directory_uri().'/customizer-repeater/css/selectric.css','1.0.0' );
+		wp_enqueue_style( 'customizer_repeater_admin_stylesheet', get_template_directory_uri().'/customizer-repeater/css/admin-style.css','1.0.0' );
+		wp_enqueue_script( 'customizer_repeater_selectric', get_template_directory_uri() .'/customizer-repeater/js/jquery.selectric.js', array( 'jquery' ), '1.0.0');
+		wp_enqueue_script( 'customizer_repeater_script', get_template_directory_uri() . '/customizer-repeater/js/customizer_repeater.js', array('jquery', 'jquery-ui-draggable', 'customizer_repeater_selectric' ), '1.0.0', true  );
+	}
+
 	public function render_content() {
 
 		/*Counter that helps checking if the box is first and should have the delete button disabled*/
