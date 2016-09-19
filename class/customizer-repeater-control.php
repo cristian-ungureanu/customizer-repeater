@@ -134,7 +134,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 					</div>
 					<div class="customizer-repeater-box-content-hidden">
 						<?php
-						$choice = $image_url = $icon_value = $title = $subtitle = $text = $link = $shortcode = '';
+						$choice = $image_url = $icon_value = $title = $subtitle = $text = $link = $shortcode = $repeater = '';
 						if(!empty($icon->choice)){
 							$choice = $icon->choice;
 						}
@@ -159,6 +159,10 @@ class Customizer_Repeater extends WP_Customize_Control {
 						if(!empty($icon->shortcode)){
 							$shortcode = $icon->shortcode;
 						}
+						if(!empty($icon->social_repeater)){
+							$repeater = $icon->social_repeater;
+						}
+
 						if($this->customizer_repeater_image_control == true && $this->customizer_repeater_icon_control == true) {
 							$this->icon_type_choice( $choice );
 						}
@@ -199,15 +203,18 @@ class Customizer_Repeater extends WP_Customize_Control {
 								'label' => __('Shortcode',$this->textdomain),
 								'class' => 'customizer-repeater-shortcode-control',
 							), $shortcode);
+						}
+						if($this->customizer_repeater_repeater_control==true){
+							$this->repeater_control($repeater);
 						} ?>
 
-						<input type="hidden" class="social-repeater-box-id" value="<?php if ( ! empty( $icon->id ) ) {
-							echo esc_attr( $icon->id );
+						<input type="hidden" class="social-repeater-box-id" value="<?php if ( ! empty( $this->id ) ) {
+							echo esc_attr( $this->id );
 						} ?>">
 						<button type="button" class="social-repeater-general-control-remove-field button" <?php if ( $it == 0 ) {
 							echo 'style="display:none;"';
 						} ?>>
-							<?php esc_html_e( 'Delete field', $this->config['textdomain'] ); ?>
+							<?php esc_html_e( 'Delete field', $this->textdomain ); ?>
 						</button>
 
 					</div>
@@ -263,7 +270,9 @@ class Customizer_Repeater extends WP_Customize_Control {
 							'class' => 'customizer-repeater-shortcode-control'
 						) );
 					}
-					?>
+					if($this->customizer_repeater_repeater_control==true){
+						$this->repeater_control();
+					} ?>
 					<input type="hidden" class="social-repeater-box-id">
 					<button type="button" class="social-repeater-general-control-remove-field button" style="display:none;">
 						<?php esc_html_e( 'Delete field', $this->textdomain ); ?>
@@ -290,7 +299,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 	}
 
 	private function icon_picker_control($value = '', $show = ''){ ?>
-		<div class="social-repeater-general-control-icon" <?php if( $show === 'customizer_repeater_image' ) echo 'style="display:none;"' ?>>
+		<div class="social-repeater-general-control-icon" <?php if( $show === 'customizer_repeater_image' ) { echo 'style="display:none;"'; } ?>>
             <span class="customize-control-title">
                 <?php esc_html_e('Icon',$this->textdomain); ?>
             </span>
@@ -310,7 +319,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 	}
 
 	private function image_control($value = '', $show = ''){ ?>
-		<p class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' ) echo 'style="display:none;"' ?>>
+		<p class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' ) { echo 'style="display:none;"'; } ?>>
             <span class="customize-control-title">
                 <?php esc_html_e('Image',$this->textdomain)?>
             </span>
@@ -331,4 +340,73 @@ class Customizer_Repeater extends WP_Customize_Control {
 		</select>
 		<?php
 	}
+
+	private function repeater_control($value = ''){
+		$social_repeater = array();
+		$show_del        = 0; ?>
+		<span class="customize-control-title"><?php esc_html_e( 'Social icons', $this->textdomain ); ?></span>
+		<?php
+		if(!empty($value)) {
+			$social_repeater = json_decode( html_entity_decode( $value ), true );
+		}
+		if ( ( count( $social_repeater ) == 1 && '' === $social_repeater[0] ) || empty( $social_repeater ) ) { ?>
+			<div class="customizer-repeater-social-repeater">
+				<div class="customizer-repeater-social-repeater-container">
+					<div class="customizer-repeater-rc input-group icp-container">
+						<input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $value ); ?>" type="text">
+						<span class="input-group-addon"></span>
+					</div>
+
+					<input type="text" class="customizer-repeater-social-repeater-link"
+					       placeholder="<?php esc_html_e( 'Link', $this->textdomain ); ?>">
+					<input type="hidden" class="customizer-repeater-social-repeater-id" value="">
+					<button class="social-repeater-remove-social-item" style="display:none">
+						<?php esc_html_e( 'X', $this->textdomain ); ?>
+					</button>
+				</div>
+				<input type="hidden" id="social-repeater-socials-repeater-colector" class="social-repeater-socials-repeater-colector" value=""/>
+			</div>
+			<button class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->textdomain ); ?></button>
+			<?php
+		} else { ?>
+			<div class="customizer-repeater-social-repeater">
+				<?php
+				foreach ( $social_repeater as $social_icon ) {
+					$show_del ++; ?>
+					<div class="customizer-repeater-social-repeater-container">
+						<div class="customizer-repeater-rc input-group icp-container">
+							<input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $social_icon['icon'] ); ?>" type="text">
+							<span class="input-group-addon"></span>
+						</div>
+						<input type="text" class="customizer-repeater-social-repeater-link"
+						       placeholder="<?php esc_html_e( 'Link', $this->textdomain ); ?>"
+						       value="<?php if ( ! empty( $social_icon['link'] ) ) {
+							       echo esc_url( $social_icon['link'] );
+						       } ?>">
+						<input type="hidden" class="customizer-repeater-social-repeater-id"
+						       value="<?php if ( ! empty( $social_icon['id'] ) ) {
+							       echo esc_attr( $social_icon['id'] );
+						       } ?>">
+						<button class="social-repeater-remove-social-item"
+						        style="<?php if ( $show_del == 1 ) {
+							        echo "display:none";
+						        } ?>"><?php esc_html_e( 'X', $this->textdomain ); ?></button>
+					</div>
+					<?php
+				} ?>
+				<input type="hidden" id="social-repeater-socials-repeater-colector"
+				       class="social-repeater-socials-repeater-colector"
+				       value="<?php echo esc_textarea( html_entity_decode( $value ) ); ?>" />
+			</div>
+			<button class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->textdomain ); ?></button>
+			<?php
+		} ?>
+
+
+
+
+
+		<?php
+	}
+
 }
