@@ -117,14 +117,12 @@ button.social-repeater-general-control-remove-field:hover{
 	cursor: pointer;
 }
 
-.customizer-repeater-social-repeater-container .dd-container{
-    display: inline-block;
-    width: 100%;
-    margin-top: 20px;
+.customizer-repeater-social-repeater > .customizer-repeater-social-repeater-container:not(:first-child){
+	margin-top: 25px;
 }
 
-.customizer-repeater-social-repeater-container .dd-container:first-child{
-	margin-top: 10px;
+.icp-container{
+	margin-bottom: 10px;
 }
 
 .customizer-repeater-social-repeater-link{
