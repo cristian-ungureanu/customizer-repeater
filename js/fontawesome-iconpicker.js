@@ -606,9 +606,6 @@
                     if (!c._isEventInsideIconpicker(a) && !c.isInline()) {
                         c.hide();
                     }
-                    a.stopPropagation();
-                    a.preventDefault();
-                    return false;
                 });
             }
             return false;
@@ -647,129 +644,129 @@
                 return this.popover.pos(a.extend({}, d, b));
             }
             switch (b) {
-              case "inline":
+                case "inline":
                 {
                     d = false;
                 }
-                break;
+                    break;
 
-              case "topLeftCorner":
+                case "topLeftCorner":
                 {
                     d.my = "right bottom";
                     d.at = "left top";
                 }
-                break;
+                    break;
 
-              case "topLeft":
+                case "topLeft":
                 {
                     d.my = "left bottom";
                     d.at = "left top";
                 }
-                break;
+                    break;
 
-              case "top":
+                case "top":
                 {
                     d.my = "center bottom";
                     d.at = "center top";
                 }
-                break;
+                    break;
 
-              case "topRight":
+                case "topRight":
                 {
                     d.my = "right bottom";
                     d.at = "right top";
                 }
-                break;
+                    break;
 
-              case "topRightCorner":
+                case "topRightCorner":
                 {
                     d.my = "left bottom";
                     d.at = "right top";
                 }
-                break;
+                    break;
 
-              case "rightTop":
+                case "rightTop":
                 {
                     d.my = "left bottom";
                     d.at = "right center";
                 }
-                break;
+                    break;
 
-              case "right":
+                case "right":
                 {
                     d.my = "left center";
                     d.at = "right center";
                 }
-                break;
+                    break;
 
-              case "rightBottom":
+                case "rightBottom":
                 {
                     d.my = "left top";
                     d.at = "right center";
                 }
-                break;
+                    break;
 
-              case "bottomRightCorner":
+                case "bottomRightCorner":
                 {
                     d.my = "left top";
                     d.at = "right bottom";
                 }
-                break;
+                    break;
 
-              case "bottomRight":
+                case "bottomRight":
                 {
                     d.my = "right top";
                     d.at = "right bottom";
                 }
-                break;
+                    break;
 
-              case "bottom":
+                case "bottom":
                 {
                     d.my = "center top";
                     d.at = "center bottom";
                 }
-                break;
+                    break;
 
-              case "bottomLeft":
+                case "bottomLeft":
                 {
                     d.my = "left top";
                     d.at = "left bottom";
                 }
-                break;
+                    break;
 
-              case "bottomLeftCorner":
+                case "bottomLeftCorner":
                 {
                     d.my = "right top";
                     d.at = "left bottom";
                 }
-                break;
+                    break;
 
-              case "leftBottom":
+                case "leftBottom":
                 {
                     d.my = "right top";
                     d.at = "left center";
                 }
-                break;
+                    break;
 
-              case "left":
+                case "left":
                 {
                     d.my = "right center";
                     d.at = "left center";
                 }
-                break;
+                    break;
 
-              case "leftTop":
+                case "leftTop":
                 {
                     d.my = "right bottom";
                     d.at = "left center";
                 }
-                break;
+                    break;
 
-              default:
+                default:
                 {
                     return false;
                 }
-                break;
+                    break;
             }
             this.popover.css({
                 display: this.options.placement === "inline" ? "" : "block"
