@@ -2,7 +2,7 @@
 /* global wp */
 function media_upload(button_class) {
     'use strict';
-    jQuery('body').on('click', button_class, function (e) {
+    jQuery('body').on('click', button_class, function () {
         var button_id = '#' + jQuery(this).attr('id');
         var display_field = jQuery(this).parent().children('input:text');
         var _custom_media = true;
@@ -43,7 +43,7 @@ function media_upload(button_class) {
 }
 
 /********************************************
- *** Generate uniq id ***
+ *** Generate unique id ***
  *********************************************/
 function customizer_repeater_uniqid(prefix, more_entropy) {
     'use strict';
@@ -60,7 +60,7 @@ function customizer_repeater_uniqid(prefix, more_entropy) {
             return seed.slice(seed.length - reqWidth);
         }
         if (reqWidth > seed.length) { // so short we pad
-            return Array(1 + (reqWidth - seed.length))
+            return new Array(1 + (reqWidth - seed.length))
                     .join('0') + seed;
         }
         return seed;
@@ -97,21 +97,21 @@ function customizer_repeater_uniqid(prefix, more_entropy) {
 function customizer_repeater_refresh_social_icons(th) {
     'use strict';
     var icons_repeater_values = [];
-    th.find(".customizer-repeater-social-repeater-container").each(function () {
-        var icon = jQuery(this).find(".icp").val();
-        var link = jQuery(this).find(".customizer-repeater-social-repeater-link").val();
-        var id = jQuery(this).find(".customizer-repeater-social-repeater-id").val();
+    th.find('.customizer-repeater-social-repeater-container').each(function () {
+        var icon = jQuery(this).find('.icp').val();
+        var link = jQuery(this).find('.customizer-repeater-social-repeater-link').val();
+        var id = jQuery(this).find('.customizer-repeater-social-repeater-id').val();
 
         if (!id) {
             id = 'customizer-repeater-social-repeater-' + customizer_repeater_uniqid();
-            jQuery(this).find(".customizer-repeater-social-repeater-id").val(id);
+            jQuery(this).find('.customizer-repeater-social-repeater-id').val(id);
         }
 
         if (icon !== '') {
             icons_repeater_values.push({
-                "icon": icon,
-                "link": link,
-                "id": id
+                'icon': icon,
+                'link': link,
+                'id': id
             });
         }
     });
@@ -123,38 +123,38 @@ function customizer_repeater_refresh_social_icons(th) {
 
 function customizer_repeater_refresh_general_control_values() {
     'use strict';
-    jQuery(".customizer-repeater-general-control-repeater").each(function () {
+    jQuery('.customizer-repeater-general-control-repeater').each(function () {
         var values = [];
         var th = jQuery(this);
-        th.find(".customizer-repeater-general-control-repeater-container").each(function () {
+        th.find('.customizer-repeater-general-control-repeater-container').each(function () {
 
             var icon_value = jQuery(this).find('.icp').val();
-            var text = jQuery(this).find(".customizer-repeater-text-control").val();
-            var link = jQuery(this).find(".customizer-repeater-link-control").val();
-            var image_url = jQuery(this).find(".custom-media-url").val();
-            var choice = jQuery(this).find(".customizer-repeater-image-choice").val();
-            var title = jQuery(this).find(".customizer-repeater-title-control").val();
-            var subtitle = jQuery(this).find(".customizer-repeater-subtitle-control").val();
-            var id = jQuery(this).find(".social-repeater-box-id").val();
+            var text = jQuery(this).find('.customizer-repeater-text-control').val();
+            var link = jQuery(this).find('.customizer-repeater-link-control').val();
+            var image_url = jQuery(this).find('.custom-media-url').val();
+            var choice = jQuery(this).find('.customizer-repeater-image-choice').val();
+            var title = jQuery(this).find('.customizer-repeater-title-control').val();
+            var subtitle = jQuery(this).find('.customizer-repeater-subtitle-control').val();
+            var id = jQuery(this).find('.social-repeater-box-id').val();
             if (!id) {
                 id = 'social-repeater-' + customizer_repeater_uniqid();
-                jQuery(this).find(".social-repeater-box-id").val(id);
+                jQuery(this).find('.social-repeater-box-id').val(id);
             }
-            var social_repeater = jQuery(this).find(".social-repeater-socials-repeater-colector").val();
-            var shortcode = jQuery(this).find(".customizer-repeater-shortcode-control").val();
+            var social_repeater = jQuery(this).find('.social-repeater-socials-repeater-colector').val();
+            var shortcode = jQuery(this).find('.customizer-repeater-shortcode-control').val();
 
             if (text !== '' || image_url !== '' || title !== '' || subtitle !== '' || icon_value !== '' || link !== '' || choice !== '' || social_repeater !== '' || shortcode !== '') {
                 values.push({
-                    "icon_value": (choice === 'customizer_repeater_none' ? "" : icon_value),
-                    "text": escapeHtml(text),
-                    "link": link,
-                    "image_url": (choice === 'customizer_repeater_none' ? "" : image_url),
-                    "choice": choice,
-                    "title": escapeHtml(title),
-                    "subtitle": escapeHtml(subtitle),
-                    "social_repeater": escapeHtml(social_repeater),
-                    "id": id,
-                    "shortcode": escapeHtml(shortcode)
+                    'icon_value': (choice === 'customizer_repeater_none' ? '' : icon_value),
+                    'text': escapeHtml(text),
+                    'link': link,
+                    'image_url': (choice === 'customizer_repeater_none' ? '' : image_url),
+                    'choice': choice,
+                    'title': escapeHtml(title),
+                    'subtitle': escapeHtml(subtitle),
+                    'social_repeater': escapeHtml(social_repeater),
+                    'id': id,
+                    'shortcode': escapeHtml(shortcode)
                 });
             }
 
@@ -167,8 +167,8 @@ function customizer_repeater_refresh_general_control_values() {
 
 jQuery(document).ready(function () {
     'use strict';
-
-    jQuery('#customize-theme-controls').on('click', '.customizer-repeater-customize-control-title', function () {
+    var theme_conrols = jQuery('#customize-theme-controls');
+    theme_conrols.on('click', '.customizer-repeater-customize-control-title', function () {
         jQuery(this).next().slideToggle('medium', function () {
             if (jQuery(this).is(':visible')){
                 jQuery(this).css('display', 'block');
@@ -176,12 +176,12 @@ jQuery(document).ready(function () {
         });
     });
 
-    jQuery("#customize-theme-controls").on('change', '.icp',function(){
+    theme_conrols.on('change', '.icp',function(){
         customizer_repeater_refresh_general_control_values();
         return false;
     });
 
-    jQuery('#customize-theme-controls').on('change', '.customizer-repeater-image-choice', function () {
+    theme_conrols.on('change', '.customizer-repeater-image-choice', function () {
         if (jQuery(this).val() === 'customizer_repeater_image') {
             jQuery(this).parent().parent().find('.social-repeater-general-control-icon').hide();
             jQuery(this).parent().parent().find('.customizer-repeater-image-control').show();
@@ -199,7 +199,7 @@ jQuery(document).ready(function () {
         return false;
     });
     media_upload('.customizer-repeater-custom-media-button');
-    jQuery(".custom-media-url").live('change', function () {
+    jQuery('.custom-media-url').live('change', function () {
         customizer_repeater_refresh_general_control_values();
         return false;
     });
@@ -209,16 +209,16 @@ jQuery(document).ready(function () {
      * This adds a new box to repeater
      *
      */
-    jQuery("#customize-theme-controls").on("click", ".customizer-repeater-new-field", function () {
+    theme_conrols.on('click', '.customizer-repeater-new-field', function () {
         var th = jQuery(this).parent();
         var id = 'customizer-repeater-' + customizer_repeater_uniqid();
         if (typeof th !== 'undefined') {
             /* Clone the first box*/
-            var field = th.find(".customizer-repeater-general-control-repeater-container:first").clone();
+            var field = th.find('.customizer-repeater-general-control-repeater-container:first').clone();
 
             if (typeof field !== 'undefined') {
                 /*Set the default value for choice between image and icon to icon*/
-                field.find(".customizer-repeater-image-choice").val('customizer_repeater_icon');
+                field.find('.customizer-repeater-image-choice').val('customizer_repeater_icon');
 
                 /*Show icon selector*/
                 field.find('.social-repeater-general-control-icon').show();
@@ -229,7 +229,7 @@ jQuery(document).ready(function () {
                 }
 
                 /*Show delete box button because it's not the first box*/
-                field.find(".social-repeater-general-control-remove-field").show();
+                field.find('.social-repeater-general-control-remove-field').show();
 
                 /* Empty control for icon */
                 field.find( '.icp' ).iconpicker().on( 'iconpickerUpdated', function() {
@@ -240,36 +240,36 @@ jQuery(document).ready(function () {
 
                 /*Remove all repeater fields except first one*/
 
-                field.find(".customizer-repeater-social-repeater").find(".customizer-repeater-social-repeater-container").not(":first").remove();
-                field.find(".customizer-repeater-social-repeater-link").val('');
-                field.find(".social-repeater-socials-repeater-colector").val('');
+                field.find('.customizer-repeater-social-repeater').find('.customizer-repeater-social-repeater-container').not(':first').remove();
+                field.find('.customizer-repeater-social-repeater-link').val('');
+                field.find('.social-repeater-socials-repeater-colector').val('');
 
                 /*Remove value from icon field*/
-                field.find(".icp").val('');
+                field.find('.icp').val('');
 
                 /*Remove value from text field*/
-                field.find(".customizer-repeater-text-control").val('');
+                field.find('.customizer-repeater-text-control').val('');
 
                 /*Remove value from link field*/
-                field.find(".customizer-repeater-link-control").val('');
+                field.find('.customizer-repeater-link-control').val('');
 
                 /*Set box id*/
-                field.find(".social-repeater-box-id").val(id);
+                field.find('.social-repeater-box-id').val(id);
 
                 /*Remove value from media field*/
-                field.find(".custom-media-url").val('');
+                field.find('.custom-media-url').val('');
 
                 /*Remove value from title field*/
-                field.find(".customizer-repeater-title-control").val('');
+                field.find('.customizer-repeater-title-control').val('');
 
                 /*Remove value from subtitle field*/
-                field.find(".customizer-repeater-subtitle-control").val('');
+                field.find('.customizer-repeater-subtitle-control').val('');
 
                 /*Remove value from shortcode field*/
-                field.find(".customizer-repeater-shortcode-control").val('');
+                field.find('.customizer-repeater-shortcode-control').val('');
 
                 /*Append new box*/
-                th.find(".customizer-repeater-general-control-repeater-container:first").parent().append(field);
+                th.find('.customizer-repeater-general-control-repeater-container:first').parent().append(field);
 
                 /*Refresh values*/
                 customizer_repeater_refresh_general_control_values();
@@ -280,7 +280,7 @@ jQuery(document).ready(function () {
     });
 
 
-    jQuery("#customize-theme-controls").on("click", ".social-repeater-general-control-remove-field", function () {
+    theme_conrols.on('click', '.social-repeater-general-control-remove-field', function () {
         if (typeof    jQuery(this).parent() !== 'undefined') {
             jQuery(this).parent().parent().remove();
             customizer_repeater_refresh_general_control_values();
@@ -289,56 +289,56 @@ jQuery(document).ready(function () {
     });
 
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-title-control', function () {
+    theme_conrols.on('keyup', '.customizer-repeater-title-control', function () {
         customizer_repeater_refresh_general_control_values();
     });
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-subtitle-control', function () {
+    theme_conrols.on('keyup', '.customizer-repeater-subtitle-control', function () {
         customizer_repeater_refresh_general_control_values();
     });
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-shortcode-control', function () {
+    theme_conrols.on('keyup', '.customizer-repeater-shortcode-control', function () {
         customizer_repeater_refresh_general_control_values();
     });
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-text-control', function () {
+    theme_conrols.on('keyup', '.customizer-repeater-text-control', function () {
         customizer_repeater_refresh_general_control_values();
     });
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-link-control', function () {
+    theme_conrols.on('keyup', '.customizer-repeater-link-control', function () {
         customizer_repeater_refresh_general_control_values();
     });
 
     /*Drag and drop to change icons order*/
 
-    jQuery(".customizer-repeater-general-control-droppable").sortable({
-        update: function (event, ui) {
+    jQuery('.customizer-repeater-general-control-droppable').sortable({
+        update: function () {
             customizer_repeater_refresh_general_control_values();
         }
     });
 
 
     /*----------------- Socials Repeater ---------------------*/
-    jQuery("#customize-theme-controls").on('click', ".social-repeater-add-social-item", function (event) {
+    theme_conrols.on('click', '.social-repeater-add-social-item', function (event) {
         event.preventDefault();
         var th = jQuery(this).parent();
         var id = 'customizer-repeater-social-repeater-' + customizer_repeater_uniqid();
         if (typeof th !== 'undefined') {
-            var field = th.find(".customizer-repeater-social-repeater-container:first").clone();
+            var field = th.find('.customizer-repeater-social-repeater-container:first').clone();
             if (typeof field !== 'undefined') {
                 field.find( '.icp' ).iconpicker();
                 field.find( '.icp' ).val('');
                 field.find( '.input-group-addon' ).find('.fa').attr('class','fa');
-                field.find(".social-repeater-remove-social-item").show();
+                field.find('.social-repeater-remove-social-item').show();
                 field.find('.customizer-repeater-social-repeater-link').val('');
                 field.find('.customizer-repeater-social-repeater-id').val(id);
-                th.find(".customizer-repeater-social-repeater-container:first").parent().append(field);
+                th.find('.customizer-repeater-social-repeater-container:first').parent().append(field);
             }
         }
         return false;
     });
 
-    jQuery("#customize-theme-controls").on('click', '.social-repeater-remove-social-item', function (event) {
+    theme_conrols.on('click', '.social-repeater-remove-social-item', function (event) {
         event.preventDefault();
         var th = jQuery(this).parent();
         var repeater = jQuery(this).parent().parent();
@@ -347,14 +347,14 @@ jQuery(document).ready(function () {
         return false;
     });
 
-    jQuery("#customize-theme-controls").on('keyup', '.customizer-repeater-social-repeater-link', function (event) {
+    theme_conrols.on('keyup', '.customizer-repeater-social-repeater-link', function (event) {
         event.preventDefault();
         var repeater = jQuery(this).parent().parent();
         customizer_repeater_refresh_social_icons(repeater);
         return false;
     });
 
-    jQuery("#customize-theme-controls").on( 'iconpickerUpdated','.icp', function(event) {
+    theme_conrols.on( 'iconpickerUpdated','.icp', function(event) {
         event.preventDefault();
         var th = jQuery(this).parent().parent().parent();
         customizer_repeater_refresh_social_icons(th);
@@ -364,16 +364,17 @@ jQuery(document).ready(function () {
 });
 
 var entityMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;',
-    "/": '&#x2F;'
+    '\'': '&#39;',
+    '/': '&#x2F;'
 };
 
 function escapeHtml(string) {
     'use strict';
+    //noinspection JSUnresolvedFunction
     string = String(string).replace(new RegExp('\r?\n', 'g'), '<br />');
     string = String(string).replace(/\\/g, '&#92;');
     return String(string).replace(/[&<>"'\/]/g, function (s) {

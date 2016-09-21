@@ -57,8 +57,8 @@ class Customizer_Repeater extends WP_Customize_Control {
 			$this->customizer_repeater_repeater_control = $args['customizer_repeater_repeater_control'];
 		}
 
-		if ( ! empty( $id ) ) {
-			$this->id = $id;
+		if ( ! empty( $args['id'] ) ) {
+			$this->id = $args['id'];
 		}
 	}
 
@@ -68,7 +68,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 
 		wp_enqueue_style( 'customizer-repeater-admin-stylesheet', get_template_directory_uri().'/customizer-repeater/css/admin-style.css','1.0.0' );
 
-		wp_enqueue_script( 'customizer-repeater-script', get_template_directory_uri() . '/customizer-repeater/js/customizer_repeater.js', array('jquery', 'jquery-ui-draggable' ), '1.0.0', true  );
+		wp_enqueue_script( 'customizer-repeater-script', get_template_directory_uri() . '/customizer-repeater/js/customizer_repeater.js', array('jquery', 'jquery-ui-draggable' ), '1.0.1', true  );
 
 		wp_enqueue_script( 'customizer-repeater-fontawesome-iconpicker', get_template_directory_uri() . '/customizer-repeater/js/fontawesome-iconpicker.min.js', array( 'jquery' ), '1.0.0', true );
 
@@ -116,7 +116,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 				       class="customizer-repeater-colector" value="<?php echo esc_textarea( $this->value() ); ?>"/>
 				<?php
 			} ?>
-		</div>
+			</div>
 		<button type="button" class="button add_field customizer-repeater-new-field">
 			<?php esc_html_e( 'Add new field', $this->textdomain ); ?>
 		</button>
@@ -287,10 +287,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 		<span class="customize-control-title"><?php echo $options['label']; ?></span>
 		<?php
 		if( !empty($options['type']) && $options['type'] === 'textarea' ){ ?>
-			<textarea class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>">
-				<?php
-				echo ( !empty($options['sanitize_callback']) ?  apply_filters( $options['sanitize_callback'] , $value) : esc_attr($value) ); ?>
-			</textarea>
+			<textarea class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"><?php echo ( !empty($options['sanitize_callback']) ?  apply_filters( $options['sanitize_callback'] , $value) : esc_attr($value) ); ?></textarea>
 			<?php
 		} else { ?>
 			<input type="text" value="<?php echo ( !empty($options['sanitize_callback']) ?  apply_filters( $options['sanitize_callback'] , $value) : esc_attr($value) ); ?>" class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"/>
@@ -319,13 +316,13 @@ class Customizer_Repeater extends WP_Customize_Control {
 	}
 
 	private function image_control($value = '', $show = ''){ ?>
-		<p class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' ) { echo 'style="display:none;"'; } ?>>
+		<div class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' ) { echo 'style="display:none;"'; } ?>>
             <span class="customize-control-title">
                 <?php esc_html_e('Image',$this->textdomain)?>
             </span>
-			<input type="text" class="widefat custom_media_url" value="<?php echo esc_attr( $value ); ?>">
+			<input type="text" class="widefat custom-media-url" value="<?php echo esc_attr( $value ); ?>">
 			<input type="button" class="button button-primary customizer-repeater-custom-media-button" value="<?php esc_html_e('Upload Image',$this->textdomain); ?>" />
-		</p>
+		</div>
 		<?php
 	}
 
@@ -400,13 +397,6 @@ class Customizer_Repeater extends WP_Customize_Control {
 			</div>
 			<button class="social-repeater-add-social-item"><?php esc_html_e( 'Add icon', $this->textdomain ); ?></button>
 			<?php
-		} ?>
-
-
-
-
-
-		<?php
+		}
 	}
-
 }
