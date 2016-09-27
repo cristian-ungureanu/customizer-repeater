@@ -234,7 +234,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 						$this->icon_type_choice();
 					}
 					if ( $this->customizer_repeater_image_control == true ) {
-						$this->image_control('','customizer_repeater_icon');
+						$this->image_control();
 					}
 					if ( $this->customizer_repeater_icon_control == true ) {
 						$this->icon_picker_control();
