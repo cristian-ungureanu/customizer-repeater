@@ -107,7 +107,7 @@ function customizer_repeater_refresh_social_icons(th) {
             jQuery(this).find('.customizer-repeater-social-repeater-id').val(id);
         }
 
-        if (icon !== '') {
+        if (icon !== '' && link !== '') {
             icons_repeater_values.push({
                 'icon': icon,
                 'link': link,

@@ -159,7 +159,9 @@ class Customizer_Repeater extends WP_Customize_Control {
 						if(!empty($icon->shortcode)){
 							$shortcode = $icon->shortcode;
 						}
-						if(!empty($icon->social_repeater)){
+
+						$social_repeater = json_decode($icon->social_repeater, true);
+						if(!empty($social_repeater)){
 							$repeater = $icon->social_repeater;
 						}
 
@@ -234,7 +236,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 						$this->icon_type_choice();
 					}
 					if ( $this->customizer_repeater_image_control == true ) {
-						$this->image_control('','customizer_repeater_icon');
+						$this->image_control();
 					}
 					if ( $this->customizer_repeater_icon_control == true ) {
 						$this->icon_picker_control();
@@ -287,10 +289,10 @@ class Customizer_Repeater extends WP_Customize_Control {
 		<span class="customize-control-title"><?php echo $options['label']; ?></span>
 		<?php
 		if( !empty($options['type']) && $options['type'] === 'textarea' ){ ?>
-			<textarea class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"><?php echo ( !empty($options['sanitize_callback']) ?  apply_filters( $options['sanitize_callback'] , $value) : esc_attr($value) ); ?></textarea>
+			<textarea class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"><?php echo ( !empty($options['sanitize_callback']) ?  call_user_func_array( $options['sanitize_callback'], array( $value ) ) : esc_attr($value) ); ?></textarea>
 			<?php
 		} else { ?>
-			<input type="text" value="<?php echo ( !empty($options['sanitize_callback']) ?  apply_filters( $options['sanitize_callback'] , $value) : esc_attr($value) ); ?>" class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"/>
+			<input type="text" value="<?php echo ( !empty($options['sanitize_callback']) ?  call_user_func_array( $options['sanitize_callback'], array( $value ) ) : esc_attr($value) ); ?>" class="<?php echo esc_attr($options['class']); ?>" placeholder="<?php echo $options['label']; ?>"/>
 			<?php
 		}
 	}
@@ -308,7 +310,7 @@ class Customizer_Repeater extends WP_Customize_Control {
                 ); ?>
             </span>
 			<div class="input-group icp-container">
-				<input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $value ); ?>" type="text">
+				<input data-placement="bottomRight" class="icp icp-auto" value="<?php if(!empty($value)) { echo esc_attr( $value );} ?>" type="text">
 				<span class="input-group-addon"></span>
 			</div>
 		</div>
@@ -350,7 +352,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 			<div class="customizer-repeater-social-repeater">
 				<div class="customizer-repeater-social-repeater-container">
 					<div class="customizer-repeater-rc input-group icp-container">
-						<input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $value ); ?>" type="text">
+						<input data-placement="bottomRight" class="icp icp-auto" value="<?php if(!empty($value)) { echo esc_attr( $value ); } ?>" type="text">
 						<span class="input-group-addon"></span>
 					</div>
 
@@ -372,7 +374,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 					$show_del ++; ?>
 					<div class="customizer-repeater-social-repeater-container">
 						<div class="customizer-repeater-rc input-group icp-container">
-							<input data-placement="bottomRight" class="icp icp-auto" value="<?php echo esc_attr( $social_icon['icon'] ); ?>" type="text">
+							<input data-placement="bottomRight" class="icp icp-auto" value="<?php if( !empty($social_icon['icon']) ) { echo esc_attr( $social_icon['icon'] ); } ?>" type="text">
 							<span class="input-group-addon"></span>
 						</div>
 						<input type="text" class="customizer-repeater-social-repeater-link"
