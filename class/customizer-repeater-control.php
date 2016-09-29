@@ -298,7 +298,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 	}
 
 	private function icon_picker_control($value = '', $show = ''){ ?>
-		<div class="social-repeater-general-control-icon" <?php if( $show === 'customizer_repeater_image' ) { echo 'style="display:none;"'; } ?>>
+		<div class="social-repeater-general-control-icon" <?php if( $show === 'customizer_repeater_image' || $show === 'customizer_repeater_none' ) { echo 'style="display:none;"'; } ?>>
             <span class="customize-control-title">
                 <?php esc_html_e('Icon',$this->textdomain); ?>
             </span>
@@ -306,7 +306,7 @@ class Customizer_Repeater extends WP_Customize_Control {
                 <?php
                 echo sprintf(
 	                __( 'Note: Some icons may not be displayed here. You can see the full list of icons at %1$s', $this->textdomain ),
-	                sprintf( '<a href="http://fontawesome.io/icons/" rel="nofollow">%s</a>', esc_html__( 'http://fontawesome.io/icons/', 'themotion' ) )
+	                sprintf( '<a href="http://fontawesome.io/icons/" rel="nofollow">%s</a>', esc_html__( 'http://fontawesome.io/icons/', $this->textdomain ) )
                 ); ?>
             </span>
 			<div class="input-group icp-container">
@@ -318,7 +318,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 	}
 
 	private function image_control($value = '', $show = ''){ ?>
-		<div class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' ) { echo 'style="display:none;"'; } ?>>
+		<div class="customizer-repeater-image-control" <?php if( $show === 'customizer_repeater_icon' || $show === 'customizer_repeater_none' ) { echo 'style="display:none;"'; } ?>>
             <span class="customize-control-title">
                 <?php esc_html_e('Image',$this->textdomain)?>
             </span>
