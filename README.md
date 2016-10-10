@@ -14,7 +14,7 @@ To install Customizer repeater copy the folder in the root of your theme and add
           */
          require get_template_directory() . '/inc/customizer.php';
 
-After you did this there's only one step left. Open the folder customizer-repeater and edit config.ini. Add your theme's textdomain and change boxtitle with your theme's name.
+After you did this there's only one step left. Replace 'your-textdomain' textdomain with yours.
 That's all
 
 ## How to use? (backend-part)
