@@ -160,8 +160,7 @@ class Customizer_Repeater extends WP_Customize_Control {
 							$shortcode = $icon->shortcode;
 						}
 
-						$social_repeater = json_decode($icon->social_repeater, true);
-						if(!empty($social_repeater)){
+						if(!empty($icon->social_repeater)){
 							$repeater = $icon->social_repeater;
 						}
 
