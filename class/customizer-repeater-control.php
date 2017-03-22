@@ -383,6 +383,7 @@ class Customizer_Repeater extends WP_Customize_Control {
                     <i class="fa <?php echo esc_attr($value); ?>"></i>
                 </span>
 			</div>
+			<?php echo wp_kses( $this->customizer_icon_container, $this->allowed_html ); ?>
 		</div>
 		<?php
 	}
