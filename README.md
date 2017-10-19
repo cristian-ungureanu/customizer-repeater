@@ -129,3 +129,6 @@ textarea instead of a simple imput. Here's what you need to do:
 ## Contribute
 
 Customizer Repeater is not perfect, but hey, It works! Do you want to make it better? Feel free to fork this and make changes on development branch.
+
+## Contributors
+Special thanks for making this awesome go to [@abaicus](https://github.com/abaicus).
