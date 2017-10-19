@@ -1,4 +1,4 @@
-# Customizer Repeater
+# Customizer Repeater v( 1.1.0 )
 
 ## What is Customizer Repeater?
 
@@ -77,6 +77,54 @@ To get the input from your control just call it in the normal way:
                    echo $social_repeater->icon;
               }
           }
+## Filters
+
+In some cases you may want to rename labels for inputs. Let's say you use this control to display a testimonial section.
+It's pretty confusing for the user to see "Title" instead of "Member name" or something else. Or in some cases you need a
+textarea instead of a simple imput. Here's what you need to do:
+
+          /**
+           * Filter to modify input type in repeater control
+           * You can filter by control id and input name.
+           *
+           * @param string $string Input label.
+           * @param string $id Input id.
+           * @param string $control Control name.
+           * @modified 1.1.41
+           *
+           * @return string
+           */
+          function repeater_input_types( $string, $id, $control ) {
+          	if ( $id === 'testimonials_content' ) { // here is the id of the control you want to change
+          		if ( $control === 'customizer_repeater_subtitle_control' ) { //Here is the input you want to change
+          			return 'textarea';
+          		}
+          	}
+          	return $string;
+          }
+          add_filter( 'customizer_repeater_input_types_filter','repeater_input_types', 10 , 3 );
+ 
+ 
+         **
+          * Filter to modify input label in repeater control
+          * You can filter by control id and input name.
+          *
+          * @param string $string Input label.
+          * @param string $id Input id.
+          * @param string $control Control name.
+          * @modified 1.1.41
+          *
+          * @return string
+          */
+         function repeater_labels( $string, $id, $control ) {
+         	if ( $id === 'testimonials_content' ) {
+         		if ( $control === 'customizer_repeater_text_control' ) {
+         			return esc_html__( 'Button Text','your-textdomain' );
+         		}
+            }
+            return $string;
+         }
+         add_filter( 'repeater_input_labels_filter','repeater_labels', 10 , 3 );
 
 ## Contribute
 
